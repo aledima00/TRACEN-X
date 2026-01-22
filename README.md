@@ -37,7 +37,7 @@ For both recording and replaying, the CAN Database file is needed to decode and 
 The CAN Bus data represents the on-board sensors used by the Ego vehicle to perceive its surroundings.
 
 ### V2X Messages
-The V2X messages are recorded from the vehicle's communication system and saved in PCAP format. The data can be replayed in real-time through a network interface. The V2X messages are essential for reproducing the messages received by the Ego vehicle from other CAVs and VRUs during the field test. The network interface can be used by the OBU of the Ego vehicle to send and receive V2X messages, just as it would in a real-world deployment.
+The V2X messages are recorded from the vehicle's communication system and saved in PCAP format. The data can be replayed in real-time through a network interface. The V2X messages are essential for reproducing the messages received by the Ego vehicle from other CAVs and VRUs during the field test. The network interface can be used by the OBU of the Ego vehicle to send and receive V2X messages, just as it would in a real-world deployment. The option `--update-datetime` in the Replay phase for V2X messages, allows reproducing them with updated timestamps to the current moment, for both ITS Payload Fields and Secured GeoNetworking Header. IN this way, the replay of V2X messages can be performed as the messages are received at the same moment of the reproduction.
 
 ### Scripts Overview
 
@@ -115,7 +115,7 @@ For consistency and to avoid unexpected permission issues, we conventionally run
 
 8. Install the npm packages for nodejs GUI:
     ```sh
-    cd replay/vehicle_visualizer
+    cd vehicle_visualizer
     sudo npm install
     ```
 
@@ -138,7 +138,7 @@ For consistency and to avoid unexpected permission issues, we conventionally run
 
 ## Usage
 
-There are many parameters that can be set for each script, depending on the data you want to record or reproduce. The scripts are designed to be flexible and allow for various configurations.
+Many parameters can be set for each script, depending on the data you want to record or reproduce. The scripts are designed to be flexible and allow for various configurations.
 The detailed usage of each script can be found by running the following commands to display the help messages:
 ```sh
 sudo python3 record/record.py --help
@@ -159,7 +159,7 @@ sudo python3 record/record.py --enable-serial --device /dev/ttyACM0 --serial-fil
 
 Example of usage for the `replay` script:
 ```sh
-sudo python3 replay/replay.py --enable-serial --serial-filename ./data/gnss_output/example1.json --server-device ./replay/ttyNewServer --client-device ./replay/ttyNewClient --baudrate 115200 --start-time 0 --end-time 10 --enable-gui --http-port 8080 --enable-pcap --interface wlan1 --pcap-filename capture.pcap --update-datetime --update-security --new-pcap-file new_pcap.pcapng --enable-amqp --amqp-server-ip 127.0.0.1 --amqp-server-port 5672 --amqp-topic tracenx --enable-CAN --CAN-device vcan0 --CAN-filename ./data/CANlog.json --CAN-db ./data/motohawk.db --enable-csv --csv-filename ./data/gnss_output/example1.csv --csv-interpolation
+sudo python3 replay/replay.py --enable-serial --serial-filename ./data/gnss_output/example1.json --server-device ./replay/ttyNewServer --client-device ./replay/ttyNewClient --baudrate 115200 --start-time 0 --end-time 10 --enable-serial-gui --http-port 8080 --enable-pcap --interface wlan1 --pcap-filename capture.pcap --update-datetime --update-security --new-pcap-file new_pcap.pcapng --enable-amqp --amqp-server-ip 127.0.0.1 --amqp-server-port 5672 --amqp-topic tracenx --enable-CAN --CAN-device vcan0 --CAN-filename ./data/CANlog.json --CAN-db ./data/motohawk.db --enable-csv --csv-filename ./data/gnss_output/example1.csv --csv-interpolation
 ```
 
 ### Merge Traces
