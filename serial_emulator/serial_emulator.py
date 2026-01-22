@@ -55,5 +55,20 @@ class SerialEmulator(object):
         self.stop()
 
     def stop(self):
+        try:
+            self.serial_server.close()
+        except:
+            pass
+        try:
+            self.serial_client.close()
+        except:
+            pass
         self.proc.kill()
-        self.out, self.err = self.proc.communicate()
+        try:
+            self.out, self.err = self.proc.communicate(timeout=2)
+        except subprocess.TimeoutExpired:
+            self.proc.terminate()
+            try:
+                self.out, self.err = self.proc.communicate(timeout=1)
+            except subprocess.TimeoutExpired:
+                pass

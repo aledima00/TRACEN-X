@@ -12,4 +12,6 @@ PKIManager/certificates/certificates.json
 PKIManager/certificates/NotToShare
 *.DS_Store
 
+*tty*
+
 venv/
