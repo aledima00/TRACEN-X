@@ -193,6 +193,7 @@ def write_pcap(barrier: Any, stop_event: Any, input_filename: str, interface: st
     startup_time = time.time() * 1e6
     try:
         for i, pkt in enumerate(pcap):
+            print(f"Processing packet {i+1}/{len(pcap)}")
             pkt_ts_us = int(1e6 * (pkt.time - base_ts))
            
             if stop_event and stop_event.is_set():
@@ -301,7 +302,10 @@ def write_pcap(barrier: Any, stop_event: Any, input_filename: str, interface: st
                             should_update_security = False
                             # CPM, modify the Reference Time
                             cpm = CPM.decode("CollectivePerceptionMessage", facilities)
-                            StationID = cpm['header']['stationID']
+                            if "stationID" not in cpm['header']:
+                                StationID = cpm["header"]["stationId"]
+                            else:
+                                StationID = cpm['header']['stationID']
                             old_reference_time = cpm["payload"]["managementContainer"]["referenceTime"]
                             new_reference_time = get_timestamp_ms(purpose="CPM")
                             assert new_reference_time > 0, "Error in time calculation"
@@ -337,7 +341,10 @@ def write_pcap(barrier: Any, stop_event: Any, input_filename: str, interface: st
                             # CAM, modify the Generation Delta Time
                             mtype = 'CAM'
                             cam = CAM.decode("CAM", facilities)
-                            StationID = cam['header']['stationID']
+                            if "stationID" not in cam['header']:
+                                StationID = cam["header"]["stationId"]
+                            else:
+                                StationID = cam['header']['stationID']
                             old_reference_time = cam["cam"]["generationDeltaTime"]
                             new_reference_time = get_timestamp_ms(purpose="CAM")
                             assert new_reference_time > 0, "Error in time calculation"
@@ -377,7 +384,10 @@ def write_pcap(barrier: Any, stop_event: Any, input_filename: str, interface: st
                             should_update_security = False
                             # VAM, modify the Generation Delta Time
                             vam = VAM.decode("VAM", facilities)
-                            StationID = vam['header']['stationID']
+                            if "stationID" not in vam['header']:
+                                StationID = vam["header"]["stationId"]
+                            else:
+                                StationID = vam['header']['stationID']
                             old_reference_time = vam["vam"]["generationDeltaTime"]
                             new_reference_time = get_timestamp_ms(purpose="VAM")
                             assert new_reference_time > 0, "Error in time calculation"
@@ -400,7 +410,10 @@ def write_pcap(barrier: Any, stop_event: Any, input_filename: str, interface: st
                         elif port == 2002:
                             mtype = 'DENM'
                             denm = DENM.decode("DENM", facilities)
-                            StationID = denm['header']['stationID']
+                            if "stationID" not in denm['header']:
+                                StationID = denm["header"]["stationId"]
+                            else:
+                                StationID = denm['header']['stationID']
                             old_reference_time = denm["denm"]["management"]["detectionTime"]
                             new_reference_time = get_timestamp_ms(purpose="DENM")
                             assert new_reference_time > 0, "Error in time calculation"
